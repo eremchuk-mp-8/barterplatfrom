@@ -1,0 +1,21 @@
+{% extends 'ads/index.html' %}
+{% block content %}
+<h2>{{ ad.title }}</h2>
+{% if ad.image_url %}
+    <img src="{{ ad.image_url }}" class="img-fluid mb-3" alt="{{ ad.title }} " width="50%">
+{% endif %}
+
+<p><strong>Описание:</strong> {{ ad.description }}</p>
+<p><strong>Категория:</strong> {{ ad.category }}</p>
+<p><strong>Состояние:</strong> {{ ad.get_condition_display }}</p>
+<p><strong>Автор:</strong> {{ ad.user.username }}</p>
+<p><strong>Дата публикации:</strong> {{ ad.created_at }}</p>
+
+{% if user == ad.user %}
+    <a href="{% url 'edit_ad' ad.id %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'delete_ad' ad.id %}" class="btn btn-danger">Удалить</a>
+{% elif user.is_authenticated %}
+    <a href="{% url 'create_proposal' ad.id %}" class="btn btn-success mt-3">Предложить обмен</a>
+{% endif %}
+
+{% endblock %}

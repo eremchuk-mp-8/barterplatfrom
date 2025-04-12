@@ -1,0 +1,58 @@
+{% extends 'ads/index.html' %}
+{% block content %}
+<h2>Список предложений обмена</h2>
+<form method="get" class="row g-3 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="sender" placeholder="Отправитель" class="form-control" value="{{ request.GET.sender }}">
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="receiver" placeholder="Получатель" class="form-control" value="{{ request.GET.receiver }}">
+    </div>
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">Статус</option>
+            <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>Ожидает</option>
+            <option value="accepted" {% if request.GET.status == "accepted" %}selected{% endif %}>Принято</option>
+            <option value="rejected" {% if request.GET.status == "rejected" %}selected{% endif %}>Отклонено</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100">Фильтровать</button>
+    </div>
+</form>
+
+{% for proposal in proposals %}
+    {% if proposal.status == "pending" and user == proposal.ad_receiver.user %}
+        <a href="{% url 'update_proposal_status' proposal.id 'accepted' %}" class="btn btn-success mb-3">Принять</a>
+        <a href="{% url 'update_proposal_status' proposal.id 'rejected' %}" class="btn btn-danger mb-3">Отказать</a> 
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <h4 class="sender-name">Отправитель: {{ proposal.ad_sender.user }}</h4> 
+        </div>
+        <div class="col">
+            <h4 class="receiver-name">Получатель: {{ proposal.ad_receiver.user }}</h4>
+        </div>
+        {% include "ads/ad_card.html" with ad=proposal.ad_sender%}
+        {% include "ads/ad_card.html" with ad=proposal.ad_receiver%}
+        <div>
+            <p class="status">Статус: {{ proposal.get_status_display }}</p>
+            <p class="comment">Комментарий: {{ proposal.comment }}</p>
+        </div>
+    </div>
+    </br>
+    {% empty %}
+    Предложений пока нет.
+{% endfor %}
+
+<div class="mt-3">
+    {% if proposals.has_previous %}
+        <a href="?page={{ proposals.previous_page_number }}" class="btn btn-secondary btn-sm">← Назад</a>
+    {% endif %}
+    <span>Страница {{ proposals.number }} из {{ proposals.paginator.num_pages }}</span>
+    {% if proposals.has_next %}
+        <a href="?page={{ proposals.next_page_number }}" class="btn btn-secondary btn-sm">Вперёд →</a>
+    {% endif %}
+</div>
+{% endblock %}

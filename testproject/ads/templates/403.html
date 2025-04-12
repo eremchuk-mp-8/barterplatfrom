@@ -1,0 +1,11 @@
+{% extends 'ads/index.html' %}
+
+{% block title %}Доступ запрещён{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-danger">Ошибка 403 – Доступ запрещён</h1>
+    <p>{{ message }}</p>
+    <a href="{% url 'ad_list' %}" class="btn btn-primary mt-3">Вернуться на главную</a>
+</div>
+{% endblock %}

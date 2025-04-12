@@ -1,0 +1,41 @@
+{% extends 'ads/index.html' %}
+{% block content %}
+<h2>Объявления</h2>
+
+<form method="get" class="row g-3 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="q" placeholder="Поиск..." class="form-control" value="{{ request.GET.q }}">
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="category" placeholder="Категория" class="form-control" value="{{ request.GET.category }}">
+    </div>
+    <div class="col-md-3">
+        <select name="condition" class="form-select">
+            <option value="">Состояние</option>
+            <option value="new" {% if request.GET.condition == "new" %}selected{% endif %}>Новый</option>
+            <option value="used" {% if request.GET.condition == "used" %}selected{% endif %}>Б/у</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100">Найти</button>
+    </div>
+</form>
+
+<a href="{% url 'create_ad' %}" class="btn btn-success mb-3">+ Новое объявление</a>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for ad in ads %}
+        {% include "ads/ad_card.html" with ad=ad%}
+    {% endfor %}
+</div>
+
+<div class="mt-3">
+    {% if ads.has_previous %}
+        <a href="?page={{ ads.previous_page_number }}" class="btn btn-secondary btn-sm">← Назад</a>
+    {% endif %}
+    <span>Страница {{ ads.number }} из {{ ads.paginator.num_pages }}</span>
+    {% if ads.has_next %}
+        <a href="?page={{ ads.next_page_number }}" class="btn btn-secondary btn-sm">Вперёд →</a>
+    {% endif %}
+</div>
+{% endblock %}
