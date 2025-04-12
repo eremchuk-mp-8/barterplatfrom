@@ -3,7 +3,7 @@
 
 ### 1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/yourusername/barter-platform.git
+git clone https://github.com/eremchuk-mp-8/barterplatfrom.git
 cd barter-platform
 ```
 
