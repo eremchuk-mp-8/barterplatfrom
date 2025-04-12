@@ -4,7 +4,7 @@
 ### 1. Клонируйте репозиторий
 ```bash
 git clone https://github.com/eremchuk-mp-8/barterplatfrom.git
-cd barter-platform
+cd barterplatform
 ```
 
 ### 2. Создайте виртуальное окружение
